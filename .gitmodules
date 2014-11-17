@@ -1,0 +1,11 @@
+#OLIF MODULES:
+[submodule "olif"]
+	path = olif
+	url = https://github.com/olif-fm/olif
+[submodule "modules/search"]
+	path = modules/search
+	url = https://github.com/olif-fm/olif-module-search
+[submodule "modules/tables"]
+	path = modules/tables
+	url = https://github.com/olif-fm/olif-module-tables
+

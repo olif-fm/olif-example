@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php"
+    stopOnError="false"
+    backupGlobals="false"
+    backupStaticAttributes="false"
+    strict="true"
+    verbose="true">
+
+  <testsuites>
+    <testsuite name="Olif">
+	  <directory suffix="Test.php">tests</directory>
+	  <directory suffix="Test.php">olif/tests</directory>
+    </testsuite>
+  </testsuites>
+
+  <logging>
+    <log type="coverage-html" target="build/coverage"/>
+    <log type="coverage-clover" target="build/logs/clover.xml"/>
+    <log type="coverage-crap4j" target="build/logs/crap4j.xml"/>
+    <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
+  </logging>
+	<filter>
+	    <blacklist>
+	        <directory >./cache</directory>
+			<directory >./css</directory>
+			<directory >./files</directory>
+			<directory >./js</directory>
+			<directory >./templates</directory>
+			<directory >./olif/threeparty</directory>
+			<directory >./olif/vendor</directory>
+	    </blacklist>
+	</filter>
+</phpunit>

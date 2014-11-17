@@ -1,0 +1,14 @@
+language: php
+php:
+  - 5.5
+  - 5.4
+  - 5.3
+env:
+  - DB=mysql
+before_script:
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS olif_example;" -uroot; mysql -h localhost olif_example < sql_base.sql -uroot;  fi
+script:
+  - phpunit -d "short_open_tag = 1" --configuration ./phpunit.xml.dist
+notifications:
+  email:
+    -  a.vara.1986@gmail.com
