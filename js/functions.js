@@ -1,340 +1,280 @@
-function sendRoomPriceSeason(input){
-	ID=$(input).data("id");
-	FK_ROOM=$(input).data("room");
-	FK_SEASON=$(input).data("season");
-	PRICE = $(input).val();
-	$.easyAjax({
-		file: 'sendBookingRoomSeasonPrice',
-		data:{
-			ID : ID,
-			FK_ROOM : FK_ROOM,
-			FK_SEASON : FK_SEASON,
-			PRICE : PRICE
-		},
-		stack:true,
-		isAdmin: false,
-		dataType: 'json',
-		success: function(json){
-			console.log(json)
-		},
-		error: function(json){
-			alert(json)
-		}
-	});
-	console.log('ID: '+ID);
-	console.log('FK_ROOM: '+FK_ROOM);
-	console.log('FK_SEASON: '+FK_SEASON);
-	console.log('PRICE: '+PRICE);
-}
+/**
+ * Funciones genéricas
+ */
 
-function sendRoom2(form, riaFile){
-	var _data = new Array();
-	var ok = true;
-	_data= {
-		ID : $('#'+form+' #ID').val(),
-		NAME : $('#'+form+' #NAME').val(),
-		CAPACITY : $('#'+form+' #CAPACITY').val(),
-		CAPACITY_EXTRA : $('#'+form+' #CAPACITY_EXTRA').val(),
-		IS_SPECIAL : $('#'+form+' #IS_SPECIAL:checked').val(),
-		IS_MINUS : $('#'+form+' #IS_MINUS:checked').val()
-	};
-	/*
-	for(var i in _data){
-		if(cm_is_empty(_data[i]) ||  _data[i] == undefined){
-			ok = false;
-		}
-	}
-	*/
-	$('#'+form+' #error_gen').css('display','none');
-	$('#'+form+' #please_wait').css('display','block');
-	$('#'+form+' #block_gen_coupon').css('display','none'); 
-	if(ok){
-		$.easyAjax({
-			file: riaFile,
-			data:_data,
-			stack:true,
-			isAdmin: false,
-			dataType: 'json',
-			success: function(json){
-				console.log(json)
-				if (json.response=="OK"){
-					$('#'+form+' #block_msgs').html('<div class="alert alert-info" >Save Ok</div>');
-					$('#'+form+' #block_msgs').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else{
-					$('#'+form+' #block_msgs').html('<div class="alert alert-danger" >An error occurred</div>');
-					$('#'+form+' #block_msgs').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}
-			},
-			error: function(json){
-				console.log(json)
-			}
-		});
-	}else{
-		$('#'+form+' #error_gen').css('display','block');
-		$('#'+form+' #please_wait').css('display','none'); 
-	}
-	return false;
+function loadURL(url) {
+    window.location.replace(url);
 }
-function sendSeason2(form, riaFile){
-	var _data = new Array();
-	var ok = true;
-	_data= {
-		ID : $('#'+form+' #ID').val(),
-		NAME : $('#'+form+' #NAME').val(),
-		TYPE : $('#'+form+' #TYPE').val(),
-		YEAR : $('#'+form+' #YEAR').val()
-	};
-	/*
-	for(var i in _data){
-		if(cm_is_empty(_data[i]) ||  _data[i] == undefined){
-			ok = false;
-		}
-	}
-	*/
-	$('#'+form+' #error_gen').css('display','none');
-	$('#'+form+' #please_wait').css('display','block');
-	$('#'+form+' #block_gen_coupon').css('display','none'); 
-	if(ok){
-		$.easyAjax({
-			file: riaFile,
-			data:_data,
-			stack:true,
-			isAdmin: false,
-			dataType: 'json',
-			success: function(json){
-				console.log(json)
-				if (json.response=="OK"){
-					$('#'+form+' #block_msgs').html('<div class="alert alert-info" >Save Ok</div>');
-					$('#'+form+' #block_msgs').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else{
-					$('#'+form+' #block_msgs').html('<div class="alert alert-danger" >An error occurred</div>');
-					$('#'+form+' #block_msgs').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}
-			},
-			error: function(json){
-				console.log(json)
-			}
-		});
-	}else{
-		$('#'+form+' #error_gen').css('display','block');
-		$('#'+form+' #please_wait').css('display','none'); 
-	}
-	return false;
-}
-function sendSeasonDate(riaFile){
-	var _data = new Array();
-	var ok = true;
-	_data= {
-		FK_SEASON : $('#ID').val(),
-		DATE_START : $('#DATE_START').val(),
-		DATE_END : $('#DATE_END').val()
-	};
-	
-	for(var i in _data){
-		if(cm_is_empty(_data[i]) ||  _data[i] == undefined){
-			ok = false;
-		}
-	}
-	/**/
-	$('#please_wait2').css('display','inline-block');
-	if(ok){
-		$.easyAjax({
-			file: riaFile,
-			data:_data,
-			stack:true,
-			isAdmin: false,
-			dataType: 'json',
-			success: function(json){
-				console.log(json)
-				if (json.response=="OK"){
-					var url=cleanURL(window.location.href);
-		        	window.location.replace(url+'&result_op=ok');
-				}else{
-					alert('An error occurred');
-					$('#please_wait2').css('display','none');
-				}
-			},
-			error: function(json){
-				console.log(json)
-			}
-		});
-	}else{
-		$('#please_wait2').css('display','none');
-	}
-	return false;
-}
-function sendCoupon(form, riaFile){
-	var _data = new Array();
-	var ok = true;
-	_data= {
-		EMAIL : $('#'+form+' #EMAIL').val(),
-		CODE : $('#'+form+' #CODE').val()
-	};
-	for(var i in _data){
-		if(cm_is_empty(_data[i]) ||  _data[i] == undefined){
-			ok = false;
-		}
-	}
-	$('#'+form+' #error_gen').css('display','none');
-	$('#'+form+' #please_wait').css('display','block');
-	$('#'+form+' #block_gen_coupon').css('display','none'); 
-	if(ok){
-		$.easyAjax({
-			file: riaFile,
-			data:_data,
-			stack:true,
-			isAdmin: false,
-			dataType: 'json',
-			success: function(json){
-				console.log(json)
-				if (json.response=="OK"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-info" >Your COUPON:<br><b>'+json.coupon+'</b></div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else if (json.response=="ERROR_CODE_ASSIGNED"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >The CODE was assigned previously</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
- 					$('#'+form+' #please_wait').css('display','none');
-				}else if (json.response=="ERROR_SAVE_CODE"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >An error occurred saving the CODE</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
- 					$('#'+form+' #please_wait').css('display','none');
-				}else if (json.response=="ERROR_SAVE_COUPON"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >An error occurred saving the COUPON</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else if (json.response=="ERROR_GET_COUPON"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >An error occurred getting the COUPON</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else if (json.response=="ERROR_CODE_NOT_EXIST_OR_IS_ASSIGNED"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >The CODE not exist or it was assigned previously</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else if (json.response=="ERROR_NO_DATA_SEND"){
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >No data was sending</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}else{
-					$('#'+form+' #block_gen_coupon').html('<div class="alert alert-danger" >An error occurred</div>');
-					$('#'+form+' #block_gen_coupon').css('display','block');
-					$('#'+form+' #please_wait').css('display','none');
-				}
-			},
-			error: function(json){
-				console.log(json)
-			}
-		});
-	}else{
-		$('#'+form+' #error_gen').css('display','block');
-		$('#'+form+' #please_wait').css('display','none'); 
-	}
-	return false;
-}
-
-
-function startIntroCoupons(){
-    var intro = introJs();
-      intro.setOptions({
-        tooltipClass: 'olif-tooltip',
-        steps: [
-          {
-            element: document.querySelector('#CouponsLoad'),
-            intro: "<b>Cupons Load:</b> Carga tu listado de códigos y cupones, juntos o por separado",
-          },
-          {
-            element: document.querySelector('#CouponsAssign'),
-            intro: "<b>Coupons Assign:</b> Prueba como lo visualizaría tu cliente.<br>\n\
-             - introduce tu email<br>\n\
-             - introduce tu código<br>\n\
-             - se generará tu cupón",
-            position: 'right'
-          },
-          {
-            element: document.querySelector('#codesCoupons'),
-            intro: "<b>Codes & Coupon:</b> Comprueba todos los datos de la asignación de cupones: fecha, hora, a quién ha sido asignado...",
-            position: 'right'
-          },
-          {
-            element: document.querySelector('#CouponsStatics'),
-            intro: '<b>Coupons Statistics:</b> Mide tus resultados visualizando el movimiento de cupones de tu campaña',
-            position: 'right'
-          }
-        ]
-      });
-
-      intro.start();
-}
-function exportGenericToXls(file,action,formFilters){
-	$('#downloadCSV').css('display','none');
-	$('#preDownload').css('display','inline-block');
-    var selectedIds = new Array();
-    var filters="";
-	if(action=='filtered'){
-		if(formFilters=='' || formFilters==undefined)formFilters='formL1';
-		filters = getFields(formFilters);
-	}    
-    if(action=='selected'){
-    	$("input[name=checkIds]:checked").each(function() {
-    		selectedIds.push($(this).val());
-    	});	    	
-    }
-   	$.easyAjax({
-		file: file,
-		data: {
-			filters:			filters,
-        	selectedIds:		selectedIds,
-        	actionFilter:		action,
-
-        },
-        stack:true,
-		isAdmin: false,
-		dataType: 'json',
-		success: function(json){
-        	$('#preDownload').css('display','none');
-        	if(json.response=='OK' && json.fileID != ""){
-        		var href=(window.location.href).replace(/^(.*)#.*$/,"$1");
-        		$('#downloadCSV').attr("href",href+"&doFa="+json.fileID);
-        		$('#downloadCSV').css('display','inline-block');
-        		
-        		$('#uploadDrive').attr("href",href+"&exportYanezDrive="+json.fileID);
-        		$('#uploadDrive').css('display','inline-block');
-        		
-            }else{
-            	$('#downloadCSV').removeClass('btn-success');
-            	$('#downloadCSV').addClass('btn-danger');
-            	$('#downloadCSV').html('Error en su petici�n:'+json.response);
-            }
-		},
-		error: function(response){
-			var url=cleanURL(window.location.href);
-        	window.location.replace(url+'&result_op=error');
-		}
-   });
-}
-function cm_is_empty(variable) { 
-    if((variable == null) || (variable.length == 0) || (variable.value == "")) { 
-      return true; 
-    }
+/**
+ * showFastForm Muestra la barra para añadir de manera Express un registro
+ */
+/**
+ *
+ *
+ */
+function seeData(url, id) {
+    $('.line').removeClass('lineSelected');
+    $('#line_' + id).addClass('lineSelected');
+    $('#ventanaPopUp_close').attr(
+        'onclick',
+        "$('#ventanaPopUp').css('display','none');$('#line_" + id
+            + "').removeClass('lineSelected');return false;")
+    // alert('ID'+id);
+    // alert('ventanaPopUp'+id);
+    openWindow(url + '&id=' + id, 'ventanaPopUp' + id);
     return false;
 }
 /**
- *  cleanURL
- * Quita caracteres que impiden que al realizar un envío con ajax y se llama a closeWindows se cierre la ventana
+ * function reloadWindow Recarga una pÃ¡gina. Nozmalmente el contendio de la
+ * pÃ¡gina pricnipal
+ */
+function reloadWindow() {
+    if (contenido != "/") {
+    loadWindow(contenido, 'contenidosmain', 'reload');
+    }
+
+}
+
+/**
+ * cleanURL Quita caracteres que impiden que al realizar un envío con ajax y se
+ * llama a closeWindows se cierre la ventana
+ *
  * @params _url: fichero donde guardar
- * */
-function cleanURL(_url){
-	_url=_url.replace('#', '');
-	_url=_url.replace('&result_op=ok', '');
-	_url=_url.replace('&result_op=error', '');
-	_url=_url.replace('&order=albaran', '');
-	_url=_url.replace('&order=senddate', '');
-	_url=_url.replace('&order=canceldate', '');
-	_url=_url.replace('&order=client', '');
-	_url=_url.replace('&order=factura', '');
-	return _url;
+ */
+function cleanURL(_url) {
+    _url = _url.replace('#', '');
+    _url = _url.replace('&result_op=ok', '');
+    _url = _url.replace('&result_op=error', '');
+    _url = _url.replace('&order=albaran', '');
+    _url = _url.replace('&order=senddate', '');
+    _url = _url.replace('&order=canceldate', '');
+    _url = _url.replace('&order=client', '');
+    _url = _url.replace('&order=factura', '');
+    return _url;
+}
+/*
+ * sendGenericForm Guarda un formulario sencillo
+ */
+function sendGenericForm(id_form, file, action, overlay) {
+    var _data = getFields(id_form);
+    // console.log(_data);
+    // return false;
+    if (_data != null) {
+    $('#' + id_form + ' #please_wait').css('display', 'block');
+    if (action == 'submit') {
+        $('#' + id_form).submit();
+        return true;
+    } else {
+        $.easyAjax({
+            stack : true,
+            admin : false,
+            file : file,
+            dataType : 'json',
+            data : _data,
+            success : function(json) {
+                if (json.result == true && (json.ID != "" || (json.redirect != "" && json.redirect != undefined))) {
+                    if (json.redirect != '' && json.redirect != undefined) {
+                        window.location.replace(base_url + json.redirect + '&result_op=ok');
+                    } else {
+                        window.location.replace(base_url+ actual_page + '&id='+ json.ID + '&result_op=ok');
+                    }
+                } else {
+                    $('#' + id_form + ' #please_wait').css('display', 'none');
+                    $('#' + id_form + ' #error_gen').css('display',"none");
+                    $('#' + id_form + ' #error_crass > div > div ').html('<i class="icon24 i-warning"></i>'+ json.response);
+                    $('#' + id_form + ' #error_crass').css(
+                        'display', 'block');
+                    }
+            },
+            error : function(response) {
+                $('#' + id_form + ' #error_crass').css('display', 'block');
+            }
+            });
+    }
+    } else {
+    $('#' + id_form + ' #send').css('display', 'block');
+    $('#' + id_form + ' #please_wait').css('display', 'none');
+    $('#' + id_form + ' #error_gen').css('display', "block");
+    }
+}
+/*
+ * getFields Guarda en un Array los campos de un formulario
+ */
+function getFields(form, validate) {
+    var $form = $('#' + form), focusMe = [];
+    if (validate === undefined)
+    validate = true;
+    if ($form) {
+    var values = {}, valid = true;
+    $form
+        .find(":input")
+        .each(
+            function(index, el) {
+                // console.log(this.id);
+                // console.log(this.type);
+                if (this.type == "radio") {
+                if (this.checked) {
+                    if ($form.find("input[name=" + this.name
+                        + "]").length > 0)
+                    values[this.name] = $(this).val();
+                    else
+                    values[this.id] = $(this).val();
+                }
+
+                } else if (this.type === "checkbox") {
+                if (values[this.id] === undefined) {
+                    values[this.id] = new Array();
+                }
+                if (this.checked) {
+                    // console.log(this)
+                    // values[this.id]=$(this).val();
+                    values[this.id].push($(this).val());
+                }
+                /**/
+                } else {
+                if (this.type === "email"
+                    && $(this).val() != ""
+                    && !isEmail(this.value)
+                    && this.required === false) {
+                    valid = false;
+                    if (validate) {
+                    bindError(this);
+                    focusMe.push(this);
+                    }
+                } else
+                    values[this.id] = $(this).val();
+                }
+
+                if (this.required !== false
+                    && this.required !== undefined) {
+                if ((this.type === "radio" || this.type === "checkbox")
+                    && !this.checked) {
+                    if (validate) {
+                    bindError(this);
+                    focusMe.push(this);
+                    }
+                    valid = false;
+                } else {
+                    if (isEmpty(this.value)
+                        || (this.type === "email" && !isEmail(this.value))) {
+                    valid = false;
+                    if (validate) {
+                        bindError(this);
+                        focusMe.push(this);
+                    }
+                    } else if (validate)
+                    unbindError(this);
+                }
+                }
+            });
+    if (validate) {
+        if (valid)
+        return values;
+        else {
+        $(focusMe[0]).focus();
+        return null;
+        }
+    } else
+        return values;
+    } else
+    return null;
+}
+function isEmail(email) {
+    return email
+        .match(/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,9})$/);
+};
+
+function isEmpty(variable) {
+    return (typeof variable === "undefined" || variable === null
+        || variable.length == 0 || variable.value === "");
+};
+
+function haveWhitespaces(variable) {
+    var espacio = [ " ", "\n", "\t", "\r" ];
+    if (!Form.isEmpty(variable))
+    for (var i = 0; i < variable.length; i++)
+        if (espacio.indexOf(variable.substring(i, i + 1)) != -1)
+        return true;
+    return false;
+}
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+function bindError(node) {
+    var $inputNode = $(node);
+    if ($inputNode.type !== "submit") {
+    if ($inputNode.nodeName == "OPTION")
+        $inputNode = $inputNode.parent();
+    $inputNode.addClass("error");
+    if ($inputNode.type === "checkbox" || $inputNode.type === "radio"
+        || $inputNode.type === "select-one"
+        || $inputNode.type === "select-multiple")
+        $inputNode.bind("change.inputError", function() {
+        $inputNode.removeClass("error");
+        $inputNode.unbind("change.error");
+        });
+    else if ($inputNode.type !== "submit")
+        $inputNode.bind("keyup.inputError", function() {
+        $inputNode.removeClass("error");
+        $inputNode.unbind("keyup.error");
+        });
+    }
+}
+function unbindError(node) {
+    var $inputNode = $(node);
+    if ($inputNode.type !== "submit") {
+    if ($inputNode.nodeName == "OPTION")
+        $inputNode = $inputNode.parent();
+    $inputNode.removeClass("input_error");
+    if ($inputNode.type === "checkbox" || $inputNode.type === "radio"
+        || $inputNode.type === "select-one"
+        || $inputNode.type === "select-multiple")
+        $inputNode.unbind("change.inputError");
+    else if ($inputNode.type !== "submit")
+        $inputNode.unbind("keyup.inputError");
+    }
+}
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function(m, key, value) {
+        vars[key] = value;
+        });
+    return vars;
+}
+function teclaPresionada(e) {
+    if (window.event) {
+    keynum = e.keyCode;
+    } else if (e.which) {
+    keynum = e.which;
+    }
+    return keynum;
+}
+function showLayer(action, section, effect) {
+    if ($('#' + section)) {
+    if (effect == 'fade') {
+        if (action == 'mostrar') {
+        $('#' + section).fadeIn("600");
+        } else {
+        $('#' + section).fadeOut("600");
+        }
+    } else if (effect == 'slide') {
+        if (action == 'mostrar') {
+        $('#' + section).show("slide", {
+            direction : "up"
+        }, 1000);
+        } else {
+        $('#' + section).hide("slide", {
+            direction : "up"
+        }, 1000);
+        }
+    } else if (effect == 'nofx') {
+        if (action == 'mostrar') {
+        $('#' + section).css("display", "block");
+        } else {
+        $('#' + section).css("display", "none");
+        }
+    }
+    }
+    return false;
 }
